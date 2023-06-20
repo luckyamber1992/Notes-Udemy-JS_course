@@ -5,7 +5,7 @@ let activePlayer;
 let holdScore;
 let scores;
 let playing;
-// define functions
+// define all functions to make sure of dry-principle
 const switchPlayer = function () {
   // switch to the other palyer
   // create a variable to hold the current player
