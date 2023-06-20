@@ -1,5 +1,5 @@
 'use strict';
-// define variables
+// define global variables
 let currentScore;
 let activePlayer;
 let holdScore;
