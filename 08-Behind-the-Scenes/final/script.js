@@ -230,4 +230,31 @@ jessicaCopy.family.push('John');
 console.log('Before marriage:', jessica2);
 console.log('After marriage: ', jessicaCopy);
 */
+// let age = 30;
+// let oldAge = age;
+// age = 31;
+// console.log(age);
+// console.log(oldAge);
+// const me = {
+//   name: 'Jonas',
+//   age: 30,
+// };
+// const friend = me;
+// friend.age = 27;
+// console.log(me);
+// console.log(friend);
+// for explanation, see JS engine in notes!
 
+// copying objects
+const jessica2 = {
+  firstName: 'Jessica',
+  lastName: 'Williams',
+  age: 27,
+  family: ['1', '2'],
+};
+const jessicopy = Object.assign({}, jessica2);
+jessicopy.lastName = 'John';
+jessicopy.family.push('3');
+jessicopy.family.push('4');
+console.log(`jessica2`, jessica2);
+console.log(`jessicopy`, jessicopy);
