@@ -94,7 +94,7 @@ const displayMovements = function (movements, sort = false) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}€</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
 
@@ -104,19 +104,19 @@ const displayMovements = function (movements, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -126,7 +126,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 const createUsernames = function (accs) {
@@ -206,7 +206,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
@@ -251,3 +251,69 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+//170 converting and checking numbers
+//1. using type coersion
+console.log(+'12');
+
+// Parsing( the str needs to start with a number!!)
+//10 refers to base 10
+console.log(Number.parseInt('30px', 10));
+console.log(Number.parseInt('e30', 10));
+console.log(Number.parseFloat('  2.5rem'));
+// NaN
+console.log(Number.isNaN(0 / 0));
+console.log(Number.isNaN('23E'));
+console.log(Number.isNaN(+'23es'));
+console.log(Number.isNaN('10'));
+console.log(Number.isNaN(2 / 0));
+// isFinite
+console.log(`--isfinite--`);
+console.log(Number.isFinite(+'23'));
+// isInteger
+console.log(`--isfinteger--`);
+console.log(Number.isInteger(2 / 3));
+console.log(Number.isInteger(2));
+console.log(Number.isInteger(2.0));
+
+//171 The math and rounding
+console.log(Math.sqrt(25));
+console.log(25 ** 1 / 2);
+//Math.max does type coersion but not parsing
+console.log(Math.max(1, 2, 3));
+//parsing does not work!
+console.log(Math.max(1, '2px', 3));
+console.log(Math.PI * Number.parseInt('10.001px') ** 2);
+console.log(Math.trunc(Math.random() * 6 + 1));
+//Math.trunc() return the integer part of a number
+const randomInt = (min, max) =>
+  Math.trunc(Math.random() * (max - min) + 1) + min;
+// 0...1->0...(max-min) ->
+console.log(randomInt(1, 3));
+//rounding integers
+console.log(Math.trunc(23.3));
+//round 四舍五入
+console.log(Math.round(23.9));
+// ceil 进1
+console.log(Math.ceil(23.2));
+console.log(Math.ceil(23.9));
+// floor 舍
+console.log(Math.floor(23.1));
+//trunc vs. floor
+console.log(Math.trunc(-23.2));
+console.log(Math.floor(-23.2));
+// rounding decimals
+//toFixed 四舍五入; it returns a string. use it with +
+console.log(+(2.79).toFixed(1));
+// remainder operator---used to check even/odd num
+console.log(5 % 2); //->1
+console.log(4 % 2 === 0);
+const isEven = n => (n % 2 === 0 ? 'is even' : 'is odd');
+console.log(isEven(3));
+
+
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    if (i % 2 === 0) row.style.backgroundColor = 'orangered';
+    if (i % 3 === 0) row.style.backgroundColor = 'blue';
+  });
+});

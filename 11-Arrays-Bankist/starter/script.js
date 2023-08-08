@@ -492,8 +492,189 @@ labelBalance.addEventListener('click', function () {
     el => Number(el.textContent.replace('€', ''))
   );
   console.log(movementsUI);
-} );
-// When Array.from() is called with an array-like object or iterable as the first argument, it converts that object into a new array.
-// const arrayLike = { length: 4, 0: 'a', 1: 'b', 2: 'c', 3: 'k' };
-// const arr_ = Array.from(arrayLike, element => element.toUpperCase());
-// console.log(arr_); // Output: ['A', 'B', 'C']
+});
+/*
+ When Array.from() is called with an array-like object or iterable as the first argument, it converts that object into a new array.
+const arrayLike = { length: 4, 0: 'a', 1: 'b', 2: 'c', 3: 'k' };
+const arr_ = Array.from(arrayLike, element => element.toUpperCase());
+console.log(arr_); // Output: ['A', 'B', 'C'] */
+
+// Array practices
+const bankDepositSum = accounts
+  .flatMap(acc => acc.movements)
+  .filter(mov => mov > 0)
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(bankDepositSum);
+// count deposits > 1000
+// method 1
+// const overOnethousand = accounts
+//   .flatMap(acc => acc.movements)
+//   .filter( mov => mov > 1000 ).length;
+// console.log( overOnethousand );
+// method 2: count things using reduce()
+const overOnethousand = accounts
+  .flatMap(acc => acc.movements)
+  .reduce((count, cur) => (cur > 1000 ? count + 1 : count), 0);
+console.log(overOnethousand);
+
+// prefixed ++ operator
+let a = 10;
+console.log(++a);
+console.log(a);
+
+// calculate deposit and withdrawal of one movemeny arr
+// 加强理解！！
+const { deposit, withdrwal } = accounts
+  .flatMap(acc => acc.movements)
+  .reduce(
+    (sums, cur) => {
+      // cur > 0 ? (sum.deposit += cur) : (sum.withdrwal += cur);
+      sums[cur > 0 ? 'deposit' : `withdrwal`] += cur;
+      return sums;
+    },
+    { deposit: 0, withdrwal: 0 }
+  );
+console.log({ deposit, withdrwal });
+
+// 4. coding exercise
+// this is a nice title ==> This Is a Nice Title
+// const convertTitleCase = function (title) {
+//   const upperTitle = title
+//     .split(' ')
+//     .map(char =>
+//       char.length > 1
+//         ? char[0].toUpperCase() + char.slice(1).toLowerCase()
+//         : char.toLowerCase()
+// )
+// .map(function (char) {
+//   if (char.length > 1) {
+//     return char[0].toUpperCase() + char.slice(1).toLowerCase();
+//   } else {
+//     return char.toLowerCase();
+//   }
+// })
+//     .join(' ');
+//   return upperTitle;
+// };
+// const str = 'this is a nice title';
+// const str2 = 'this is A HUGE MISTAKE';
+// console.log(convertTitleCase(str));
+// console.log(convertTitleCase(str2));
+
+// Answer
+
+// const convertTitleCase = function (title) {
+//   const exceptions = [
+//     'and',
+//     'as',
+//     'but',
+//     'for',
+//     'if',
+//     'nor',
+//     'or',
+//     'so',
+//     'yet',
+//     'a',
+//     'an',
+//     'the',
+//   ];
+//   const capUpper = str => str[0].toUpperCase() + str.slice(1).toLowerCase();
+//   const titleCase = title
+//     .toLowerCase()
+//     .split(' ')
+//     .map(str => (exceptions.includes(str) ? str : capUpper(str)))
+//     .join(' ');
+//   return titleCase;
+// };
+// console.log(convertTitleCase('I am a girl and I am nor a woman yet'));
+
+// coding challenge #4
+/* 
+1. Loop over the 'dogs' array containing dog objects, and for each dog, calculate
+the recommended food portion and add it to the object as a new property. Do
+not create a new array, simply loop over the array. Forumla:
+recommendedFood = weight ** 0.75 * 28. (The result is in grams of
+food, and the weight needs to be in kg)
+*/
+const dogs = [
+  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+  { weight: 8, curFood: 200, owners: ['Matilda'] },
+  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+  { weight: 32, curFood: 340, owners: ['Michael'] },
+];
+
+dogs.forEach(dog => (dog.recommendFood = Math.trunc(dog.weight ** 0.75 * 28)));
+console.log(dogs);
+
+/*
+Find Sarah's dog and log to the console whether it's eating too much or too
+little. Hint: Some dogs have multiple owners, so you first need to find Sarah in
+the owners array 
+*/
+// loop through owners and find sarah's dog
+const Obj = dogs.find(dog => dog.owners.includes('Sarah'));
+console.log(Obj);
+console.log(
+  `sarah's dog is eating ${
+    Obj.curFood > Obj.recommendFood ? 'too much' : 'too little'
+  }`
+);
+
+/*
+Create an array containing all owners of dogs who eat too much('ownersEatTooMuch') and 
+an array with all owners of dogs who eat too little ('ownersEatTooLittle')
+*/
+const ownersEatTooMuch = dogs
+  .filter(dog => dog.curFood > dog.recommendFood)
+  .flatMap(dog => dog.owners);
+console.log(ownersEatTooMuch);
+const ownersEatTooLittle = dogs
+  .filter(dog => dog.curFood < dog.recommendFood)
+  .flatMap(dog => dog.owners);
+
+/*
+Log a string to the console for each array created in 3., like this: "Matilda and
+Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat
+too little!
+*/
+console.log(`${ownersEatTooLittle.join(' and ')}'s dog eat too much`);
+
+/*
+Log to the console whether there is any dog eating exactly the amount of food
+that is recommended (just true or false)
+*/
+// some()
+// const resultArr = [];
+// for (const dog of dogs) {
+//   resultArr.push(dog.curFood === dog.recommendFood);
+// }
+// console.log(resultArr);
+const eatingWell = dogs.some(dog => dog.curFood === dog.recommendFood);
+console.log(`eating the same amount as recommended:  ${eatingWell}`);
+
+/*
+Log to the console whether there is any dog eating an okay amount of food
+(just true or false)
+*/
+//加深理解💥
+const eatingOk = dog =>
+  dog.curFood > dog.recommendFood * 0.9 &&
+  dog.curFood < dog.recommendFood * 1.1;
+
+console.log(dogs.some(eatingOk));
+
+/*
+Create an array containing the dogs that are eating an okay amount of food (try
+to reuse the condition used in 6.)
+*/
+const eatingokArr = dogs.filter(dog => eatingOk(dog));
+console.log(eatingokArr);
+/*
+Create a shallow copy of the 'dogs' array and sort it by recommended food
+portion in an ascending order (keep in mind that the portions are inside the
+array's objects 😉)
+*/
+const dogscopy = dogs.slice().sort((a, b) => a.recommendFood - b.recommendFood);
+
+console.log(dogscopy);
+

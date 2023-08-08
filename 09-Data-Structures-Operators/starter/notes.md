@@ -100,3 +100,9 @@ it returns the index number and the index itself
 JS converts string into a string object and call the methods on the string
 all string 
 .join() : takes a list and returns an array
+
+# Suplement
+- Arrow function 
+Code example
+> const multiply = (a,b) => a*b
+> const getCode = str => str.slice(0,3)
